@@ -85,9 +85,4 @@ class Product
     {
         return $this->createdAt;
     }
-
-    public function setCreatedAt(\DateTimeImmutable $createdAt): void
-    {
-        $this->createdAt = $createdAt;
-    }
 }

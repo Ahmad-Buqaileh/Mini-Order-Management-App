@@ -6,11 +6,12 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'users')]
 #[ORM\HasLifecycleCallbacks]
-class User
+class User implements PasswordAuthenticatedUserInterface
 {
     public function __construct()
     {
@@ -30,6 +31,8 @@ class User
     private \DateTimeImmutable $createdAt;
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: "user", cascade: ['persist', 'remove'], fetch: 'LAZY', orphanRemoval: true)]
     private Collection $orders;
+    #[ORM\OneToOne(targetEntity: Cart::class, mappedBy: "user", cascade: ['persist', 'remove'])]
+    private ?Cart $cart = null;
 
     #[ORM\PrePersist]
     public function onCreate(): void
@@ -71,5 +74,30 @@ class User
     public function getHashedPassword(): string
     {
         return $this->hashedPassword;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->hashedPassword;
+    }
+
+    public function getCart(): ?Cart
+    {
+        return $this->cart;
+    }
+
+    public function setCart(?Cart $cart): void
+    {
+        $this->cart = $cart;
+    }
+
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function setOrders(Collection $orders): void
+    {
+        $this->orders = $orders;
     }
 }
