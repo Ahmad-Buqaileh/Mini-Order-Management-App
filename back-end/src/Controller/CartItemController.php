@@ -1,0 +1,66 @@
+<?php
+
+namespace App\Controller;
+
+use App\Dto\Request\CartItem\AddCartItemRequestDTO;
+use App\Service\CartItemService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
+#[Route("/api/v1/cart_items")]
+class CartItemController extends AbstractController
+{
+    private CartItemService $cartItemService;
+    private ValidatorInterface $validator;
+
+    public function __construct(CartItemService $cartItemService, ValidatorInterface $validator)
+    {
+        $this->cartItemService = $cartItemService;
+        $this->validator = $validator;
+    }
+
+    #[Route(name: "api_cart_item_add", methods: ["POST"])]
+    public function addItemToCart(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if ($data == null && json_last_error() !== JSON_ERROR_NONE) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Invalid JSON'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $dto = new AddCartItemRequestDTO(
+            $data['productId'],
+            $data['cartId'],
+            $data['quantity']
+        );
+        print_r($dto);
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            $errorArray = [];
+            foreach ($errors as $error) {
+                $errorArray[$error->getPropertyPath()][] = $error->getMessage();
+            }
+            return $this->json([
+                'success' => false,
+                'message' => $errorArray
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        try {
+            $this->cartItemService->addItemToCart($dto);
+        } catch (\Exception $exception) {
+            return $this->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        return $this->json([
+            'success' => true,
+            'message' => 'Item added to cart successfully'
+        ], Response::HTTP_CREATED);
+    }
+}
