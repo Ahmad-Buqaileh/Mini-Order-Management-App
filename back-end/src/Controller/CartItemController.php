@@ -38,7 +38,6 @@ class CartItemController extends AbstractController
             $data['cartId'],
             $data['quantity']
         );
-        print_r($dto);
         $errors = $this->validator->validate($dto);
         if (count($errors) > 0) {
             $errorArray = [];
