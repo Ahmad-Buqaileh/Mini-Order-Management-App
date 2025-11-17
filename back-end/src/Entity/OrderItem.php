@@ -17,7 +17,7 @@ class OrderItem
     private int $quantity;
     #[ORM\Column(type: 'decimal', scale: 2, nullable: false)]
     private string $subtotal;
-    #[ORM\ManyToOne(targetEntity: Order::class, inversedBy: "items")]
+    #[ORM\ManyToOne(targetEntity: Order::class, cascade: ['persist', 'remove'], inversedBy: "items")]
     #[ORM\JoinColumn(name: "order_id", referencedColumnName: "id", nullable: false)]
     private Order $order;
     #[ORM\ManyToOne(targetEntity: Product::class)]

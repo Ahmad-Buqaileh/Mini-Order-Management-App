@@ -17,7 +17,7 @@ class CartItem
     private int $quantity;
     #[ORM\Column(type: 'decimal', scale: 2, nullable: false)]
     private string $subtotal;
-    #[ORM\ManyToOne(targetEntity: Cart::class, inversedBy: 'items')]
+    #[ORM\ManyToOne(targetEntity: Cart::class, cascade: ['persist', 'remove'], inversedBy: 'items')]
     #[ORM\JoinColumn(name: 'cart_id', referencedColumnName: 'id', nullable: false)]
     private Cart $cart;
     #[ORM\ManyToOne(targetEntity: Product::class)]
