@@ -1,0 +1,23 @@
+<div class="px-50 py-8">
+    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+        <h1 class="text-2xl md:text-3xl font-bold">Search Results</h1>
+
+        <div class="flex flex-row items-center gap-3">
+            <label for="priceFilter" class="text-sm md:text-base">Sort by price:</label>
+            <select id="priceFilter" name="priceFilter" class="border rounded px-2 py-1 text-sm md:text-base">
+                <option value="all">All</option>
+                <option value="low-high">Price: Low to High</option>
+                <option value="high-low">Price: High to Low</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+        <app-product-card-component></app-product-card-component>
+        <app-product-card-component></app-product-card-component>
+        <app-product-card-component></app-product-card-component>
+        <app-product-card-component></app-product-card-component>
+        <app-product-card-component></app-product-card-component>
+        <app-product-card-component></app-product-card-component>
+    </div>
+</div>
