@@ -1,0 +1,17 @@
+<app-header-component></app-header-component>
+<div class="px-50 py-8">
+  <h1 class="text-3xl font-bold">Your order items</h1>
+  <div class="flex flex-row items-start justify-between mt-3 gap-6">
+    <div class="flex flex-col border w-5xl p-5 max-h-[80vh] overflow-auto">
+      <app-order-item-card-component></app-order-item-card-component>
+      <app-order-item-card-component></app-order-item-card-component>
+    </div>
+    <div
+      class="flex flex-col text-lg font-medium p-5 w-xs gap-2 rounded-md"
+      style="box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5)"
+    >
+      <p class="">Total Items: 0</p>
+      <p class="">Total Price: $0.00</p>
+    </div>
+  </div>
+</div>
