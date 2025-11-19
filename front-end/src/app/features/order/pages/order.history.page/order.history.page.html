@@ -2,8 +2,14 @@
 <div class="px-50 py-8">
   <h1 class="text-3xl font-bold mb-6">Your Order History</h1>
   <div class="flex flex-col gap-4">
-    <app-order-card-component></app-order-card-component>
-    <app-order-card-component></app-order-card-component>
-    <app-order-card-component></app-order-card-component>
+    @if(orders$ | async; as order){
+      @if(order.orders.length === 0){
+        <h2>You have no past orders.</h2>
+      } @else {
+        @for(orderItem of order.orders; track orderItem.id){
+          <app-order-card-component [order]="orderItem"></app-order-card-component>
+        }
+      }
+    }
   </div>
 </div>

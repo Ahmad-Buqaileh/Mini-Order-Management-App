@@ -3,15 +3,22 @@
   <h1 class="text-3xl font-bold">Your order items</h1>
   <div class="flex flex-row items-start justify-between mt-3 gap-6">
     <div class="flex flex-col border w-5xl p-5 max-h-[80vh] overflow-auto">
-      <app-order-item-card-component></app-order-item-card-component>
-      <app-order-item-card-component></app-order-item-card-component>
+      @if(orderItems$ | async; as items) {
+        @if (items.length === 0) {
+      <p class="text-lg font-medium">No items in this order.</p>
+      } @else {
+        @for (item of items; track $index) {
+      <app-order-item-card-component [orderItem]="item"></app-order-item-card-component>
+        }
+      }
+    }
     </div>
     <div
       class="flex flex-col text-lg font-medium p-5 w-xs gap-2 rounded-md"
       style="box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5)"
     >
-      <p class="">Total Items: 0</p>
-      <p class="">Total Price: $0.00</p>
+      <p class="">Total Items: {{ (orderItems$ | async)?.length }}</p>
+      <p class="">Total Price: ${{(totalPrice$ | async)?.toFixed(2)}}</p>
     </div>
   </div>
 </div>

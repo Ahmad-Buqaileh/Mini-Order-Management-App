@@ -1,21 +1,16 @@
-<div
-  class="block p-4 rounded-base border-b border-gray-300">
+<div class="block p-4 rounded-base border-b border-gray-300">
   <div class="flex justify-between items-start mb-2">
     <h5 class="text-lg md:text-xl font-semibold tracking-tight text-heading leading-6">
-      Product Name
+      {{ orderItem.productName }}
     </h5>
-    <p class="text-lg md:text-xl font-bold text-brand">Subtotal: $0.00</p>
+    <p class="text-lg md:text-xl text-brand">price: ${{ orderItem.price }}</p>
   </div>
   <div class="flex justify-between items-center mb-4 text-sm md:text-base">
     <p>
       <strong>Quantity:</strong>
-      <span class="font-medium">0</span>
+      <span class="font-medium">{{ orderItem.quantity }}</span>
     </p>
-    <p>
-      <strong>Price:</strong>
-      <span class="font-medium">$0.00</span>
-    </p>
+    <p class="text-lg md:text-xl font-medium text-brand">Subtotal: ${{ orderItem.subtotal }}</p>
   </div>
-  <div class="flex items-center gap-3">
-  </div>
+  <div class="flex items-center gap-3"></div>
 </div>

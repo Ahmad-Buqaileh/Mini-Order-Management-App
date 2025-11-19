@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-order-item-card-component',
@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './order.item.card.component.scss',
 })
 export class OrderItemCardComponent {
-
+  @Input() orderItem!: any;
 }
