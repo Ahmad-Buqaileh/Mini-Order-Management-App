@@ -2,30 +2,36 @@
   class="block max-w-sm p-6 rounded-md shadow-xs"
   style="box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5)"
 >
-  <h5 class="mb-3 text-2xl font-semibold tracking-tight text-heading leading-8">name</h5>
+  <h5 class="mb-3 text-2xl font-semibold tracking-tight text-heading leading-8">
+    {{ product.name }}
+  </h5>
   <p class="text-sm text-muted mb-2">
     <strong>Category:</strong>
-    <span class="font-medium">category</span>
+    <span class="font-medium">{{ product.category }}</span>
   </p>
   <p class="text-lg font-bold mb-2">
     <strong>Price:</strong>
-    <span class="text-brand">price</span>
+    <span class="text-brand">{{ product.price }}</span>
   </p>
   <p class="mb-2">
     <strong>Stock:</strong>
-    stock info
+    {{ product.stock }}
   </p>
   <div class="flex flex-row items-center mb-5 gap-2">
     <p>Quantity:</p>
     <div class="flex flex-row items-center gap-3 border border-gray-300 rounded py-1">
-      <button class="cursor-pointer px-2">-</button>
-      <p>0</p>
-      <button class="cursor-pointer px-2">+</button>
+      <button (click)="decrementQuantity()" class="cursor-pointer px-2" [disabled]="product.stock === 0">-</button>
+      <p>{{ quantity() }}</p>
+      <button (click)="incrementQuantity()" class="cursor-pointer px-2" [disabled]="product.stock === 0">+</button>
     </div>
   </div>
   <div class="flex items-center gap-3">
     <button
-      class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-2 px-4 rounded cursor-pointer"
+      (click)="addToCart()"
+      [disabled]="product.stock === 0"
+      [ngClass]="{ 'opacity-50 cursor-not-allowed': product.stock === 0 }"
+      class="bg-blue-500 hover:bg-blue-600 text-white text-xs font-bold py-2 px-4 rounded"
+      aria-disabled="{{ product.stock === 0 }}"
     >
       Add to cart
     </button>

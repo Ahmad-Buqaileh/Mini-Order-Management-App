@@ -1,10 +1,10 @@
 <h1 class="px-50 text-xl font-bold mt-20">Explore our products</h1>
 <div class="px-50 mt-10 products-grid">
   <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 mb-10">
-    <app-product-card-component></app-product-card-component>
-    <app-product-card-component></app-product-card-component>
-    <app-product-card-component></app-product-card-component>
-    <app-product-card-component></app-product-card-component>
-    <app-product-card-component></app-product-card-component>
+
+    <app-product-card-component
+      *ngFor="let product of products$ | async"
+      [product]="product">
+    </app-product-card-component>
   </div>
-</div>
+</div> 
