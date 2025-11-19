@@ -1,18 +1,26 @@
 <app-header-component></app-header-component>
+
 <div class="px-50 py-8">
   <h1 class="text-3xl font-bold">Your Shopping Cart</h1>
   <div class="flex flex-row items-start justify-between mt-3 gap-6">
     <div class="flex flex-col border w-5xl p-5 max-h-[80vh] overflow-auto">
-      <app-cart-card-component></app-cart-card-component>
-      <app-cart-card-component></app-cart-card-component>
+      @if (cartItems$ | async; as items) { @if (items.length === 0) {
+      <h1>Your cart is empty, please add some items to your cart to continue with the order.</h1>
+      } @else { @for (item of items; track item.id) {
+      <app-cart-card-component [cartItem]="item"></app-cart-card-component>
+      } } }
     </div>
     <div
       class="flex flex-col text-lg font-medium p-5 w-xs gap-2 rounded-md"
-      style="box-shadow: 0px 0px 5px 1px rgba(0, 0, 0, 0.5)"
+      style="box-shadow: 0 0 5px 1px rgba(0, 0, 0, 0.5)"
     >
-      <p class="">Total Items: 0</p>
-      <p class="">Total Price: $0.00</p>
-      <button class="bg-blue-500 text-white py-1 rounded-md hover:bg-blue-600 cursor-pointer">
+      <p>Total Items: {{ (cartItems$ | async)?.length }}</p>
+      <p>Total Price: ${{ (totalPrice$ | async)?.toFixed(2) }}</p>
+
+      <button
+        (click)="handleSubmitOrder()"
+        class="bg-blue-500 text-white py-1 rounded-md hover:bg-blue-600 cursor-pointer"
+      >
         Order
       </button>
     </div>

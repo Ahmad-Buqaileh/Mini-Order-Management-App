@@ -1,18 +1,14 @@
 <div class="block w-full border-b py-5 border-gray-300 rounded-base">
   <div class="flex flex-row justify-between items-start mb-2">
     <h5 class="text-lg md:text-xl font-semibold tracking-tight text-heading leading-6">
-      Product Name
+      {{ cartItem.product.name }}
     </h5>
-    <p class="text-lg md:text-xl font-bold text-brand">$0.00</p>
+    <p class="text-lg md:text-xl font-bold text-brand">$ {{ cartItem.product.price }}</p>
   </div>
   <div class="flex flex-row justify-between items-center mb-4 text-sm md:text-base">
     <p>
-      <strong>Category:</strong>
-      <span class="font-medium">category</span>
-    </p>
-    <p>
-      <strong>Stock:</strong>
-      <span class="font-medium">In stock</span>
+      <strong>Quantity: </strong>
+      <span class="font-medium">{{ cartItem.quantity }}</span>
     </p>
   </div>
   <div class="flex flex-row justify-between">
@@ -31,6 +27,6 @@
         +
       </button>
     </div>
-    <p><span class="font-bold">Total:</span> $0.00</p>
+    <p><span class="font-bold">Total:</span> {{cartItem.subtotal}}</p>
   </div>
 </div>
