@@ -1,8 +1,8 @@
 <h1 class="text-center mt-5 text-3xl bg-white">Search for products</h1>
 
 <div class="flex flex-row justify-center mt-7">
-  <form class="flex flex-row items-center w-2xl border rounded-md">
-    <input class="w-full outline-none text-gray-600 pl-2" type="text" name="searchQuery" id="" placeholder="search for a product" />
+  <form class="flex flex-row items-center w-2xl border rounded-md" (submit)="onSearch(searchInput.value); $event.preventDefault()">
+    <input #searchInput class="w-full outline-none text-gray-600 pl-2" type="text" name="searchQuery" placeholder="search for a product" (input)="query.set(searchInput.value)" [value]="query()" />
     <button class="bg-blue-500 text-white p-3 rounded-r" type="submit">search</button>
   </form>
 </div>
