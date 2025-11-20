@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Dto\Request\CartItem\AddCartItemRequestDTO;
+use App\Dto\Request\CartItem\UpdateCartItemQuantityDTO;
+use App\Dto\Response\CartItem\CartItemResponseDTO;
 use App\Service\CartItemService;
 use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -64,16 +66,57 @@ class CartItemController extends AbstractController
         ], Response::HTTP_CREATED);
     }
 
+    #[Route('/update', name: 'update_cart_item', methods: ['PUT'])]
+    public function update(Request $request): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+        if ($data == null && json_last_error() !== JSON_ERROR_NONE) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Invalid JSON'
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        $dto = new UpdateCartItemQuantityDTO(
+            $data['cartItemId'],
+            $data['quantity'],
+        );
+        $errors = $this->validator->validate($dto);
+        if (count($errors) > 0) {
+            $errorArray = [];
+            foreach ($errors as $error) {
+                $errorArray[$error->getPropertyPath()][] = $error->getMessage();
+            }
+            return $this->json([
+                'success' => false,
+                'message' => $errorArray
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        try{
+            $item = $this->cartItemService->updateQuantity($dto);
+        } catch (\Exception $exception) {
+            return $this->json([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        return $this->json([
+            'success' => true,
+            'message' => 'Item updated successfully',
+            'cartItem' => new CartItemResponseDTO($item)
+        ],Response::HTTP_OK);
+    }
+
     #[Route(name: "api_cart_item_delete", methods: ["DELETE"])]
-    public function deleteItemFromCart(Request $request): JsonResponse{
+    public function deleteItemFromCart(Request $request): JsonResponse
+    {
         $cartItemId = $request->query->get('itemId');
         if ($cartItemId == null) return $this->json([
             'success' => false,
             'message' => 'Item id not provided must be query'
         ], Response::HTTP_BAD_REQUEST);
-        try{
+        try {
             $this->cartItemService->removeItemFromCart($cartItemId);
-        } catch (Exception $e){
+        } catch (Exception $e) {
             return $this->json([
                 'success' => false,
                 'message' => $e->getMessage()

@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Dto\Request\CartItem\AddCartItemRequestDTO;
+use App\Dto\Request\CartItem\UpdateCartItemQuantityDTO;
 use App\Entity\CartItem;
 use App\Repository\CartItemRepository;
 use App\Repository\CartRepository;
@@ -49,7 +50,7 @@ class CartItemService
             throw new UserNotFoundException('User not found');
         }
         $cart = $this->cartRepository->findOneBy(['user' => $user]);
-        if(!$cart) {
+        if (!$cart) {
             throw new \RuntimeException('Cart not found');
         }
         $product = $this->productRepository->find($dto->getProductId());
@@ -75,6 +76,22 @@ class CartItemService
         $price = (float)$product->getPrice();
         $subtotal = $price * $cartItem->getQuantity();
         $cartItem->setSubtotal(number_format($subtotal, 2, '.', ''));
+        $this->cartItemRepository->save($cartItem, true);
+        return $cartItem;
+    }
+
+    public function updateQuantity(UpdateCartItemQuantityDTO $dto): object
+    {
+        $cartItem = $this->cartItemRepository->find($dto->getCartItemId());
+        if (!$cartItem) {
+            throw new \RuntimeException('Cart item not found');
+        }
+        $product = $cartItem->getProduct();
+        if ($product->getStock() < $dto->getQuantity()) {
+            throw new \RuntimeException('Not enough product stock');
+        }
+        $cartItem->setQuantity($dto->getQuantity());
+        $cartItem->setSubtotal(number_format($dto->getQuantity() * $product->getPrice(), 2, '.', ''));
         $this->cartItemRepository->save($cartItem, true);
         return $cartItem;
     }
