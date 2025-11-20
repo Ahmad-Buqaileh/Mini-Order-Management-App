@@ -30,6 +30,23 @@ class OrderService
         $this->orderItemRepository = $orderItemRepository;
     }
 
+    public function getOrderItems(string $orderId): array
+    {
+        $order = $this->orderRepository->find($orderId);
+        if(!$order){
+            throw new \RuntimeException('Order not found');
+        }
+        return array_map(function (OrderItem $item) {
+            return [
+                'id' => $item->getId(),
+                'productName' => $item->getProduct()->getName(),
+                'quantity' => $item->getQuantity(),
+                'price' => $item->getProduct()->getPrice(),
+                'subtotal' => $item->getSubtotal(),
+            ];
+        }, $order->getItems()->toArray());
+    }
+
     public function getUserOrders(string $userId): array
     {
         $user = $this->userRepository->find($userId);
@@ -38,20 +55,9 @@ class OrderService
         }
         $orders = $this->orderRepository->findBy(['user' => $user]);
         return array_map(static function (Order $order) {
-            $items = [];
-            foreach ($order->getItems() as $item) {
-                $items[] = [
-                    'id' => $item->getId(),
-                    'productId' => $item->getProduct()->getId(),
-                    'productName' => $item->getProduct()->getName(),
-                    'quantity' => $item->getQuantity(),
-                    'subtotal' => $item->getSubtotal(),
-                ];
-            }
             return [
                 'id' => $order->getId(),
                 'total' => $order->getTotal(),
-                'items' => $items,
                 'createdAt' => $order->getCreatedAt(),
             ];
         }, $orders);

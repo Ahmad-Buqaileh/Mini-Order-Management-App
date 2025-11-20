@@ -21,6 +21,24 @@ class OrderController extends AbstractController
         $this->validator = $validator;
     }
 
+    #[Route('/order/{orderId}', name: 'api_orders_order_get', methods: ['GET'])]
+    public function getOrderItems(string $orderId): JsonResponse
+    {
+        try {
+            $orderItems = $this->orderService->getOrderItems($orderId);
+        } catch (\Exception $exception) {
+            return new JsonResponse([
+                'success' => false,
+                'message' => $exception->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        return new JsonResponse(
+            [
+                'success' => true,
+                'OrderItems' => $orderItems
+            ], Response::HTTP_OK);
+    }
+
     #[Route('/{userId}', name: 'api_orders_get', methods: ['GET'])]
     public function getUserOrders(string $userId): JsonResponse
     {
@@ -28,12 +46,15 @@ class OrderController extends AbstractController
             $orders = $this->orderService->getUserOrders($userId);
         } catch (\Exception $exception) {
             return new JsonResponse([
+                'success' => false,
                 'error' => $exception->getMessage()
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+            ], Response::HTTP_BAD_REQUEST);
         }
         return new JsonResponse(
-            $orders,
-            Response::HTTP_OK);
+            [
+                'success' => true,
+                'orders' => $orders
+            ], Response::HTTP_OK);
     }
 
     #[Route('/{userId}', name: 'api_orders_add', methods: ['POST'])]
