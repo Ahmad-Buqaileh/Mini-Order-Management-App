@@ -31,7 +31,7 @@ class CartController extends AbstractController
         }
         return new JsonResponse([
             'success' => true,
-            'cart items' => $items
+            'cartItems' => $items
         ], Response::HTTP_OK);
     }
 

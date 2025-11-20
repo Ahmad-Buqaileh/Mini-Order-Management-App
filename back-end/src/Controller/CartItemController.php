@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Dto\Request\CartItem\AddCartItemRequestDTO;
 use App\Service\CartItemService;
+use PHPUnit\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,7 +36,7 @@ class CartItemController extends AbstractController
         }
         $dto = new AddCartItemRequestDTO(
             $data['productId'],
-            $data['cartId'],
+            $data['userId'],
             $data['quantity']
         );
         $errors = $this->validator->validate($dto);
@@ -61,5 +62,26 @@ class CartItemController extends AbstractController
             'success' => true,
             'message' => 'Item added to cart successfully'
         ], Response::HTTP_CREATED);
+    }
+
+    #[Route(name: "api_cart_item_delete", methods: ["DELETE"])]
+    public function deleteItemFromCart(Request $request): JsonResponse{
+        $cartItemId = $request->query->get('itemId');
+        if ($cartItemId == null) return $this->json([
+            'success' => false,
+            'message' => 'Item id not provided must be query'
+        ], Response::HTTP_BAD_REQUEST);
+        try{
+            $this->cartItemService->removeItemFromCart($cartItemId);
+        } catch (Exception $e){
+            return $this->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], Response::HTTP_BAD_REQUEST);
+        }
+        return $this->json([
+            'success' => true,
+            'message' => 'Item deleted from cart successfully'
+        ], Response::HTTP_NO_CONTENT);
     }
 }

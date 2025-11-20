@@ -7,19 +7,23 @@ use App\Entity\CartItem;
 use App\Repository\CartItemRepository;
 use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
+use App\Repository\UserRepository;
+use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class CartItemService
 {
     private ProductRepository $productRepository;
     private CartRepository $cartRepository;
+    private UserRepository $userRepository;
     private CartItemRepository $cartItemRepository;
 
     public function __construct(ProductRepository  $productRepository, CartRepository $cartRepository,
-                                CartItemRepository $cartItemRepository)
+                                CartItemRepository $cartItemRepository, UserRepository $userRepository)
     {
         $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->cartItemRepository = $cartItemRepository;
+        $this->userRepository = $userRepository;
     }
 
     public function getCartItem(string $cartId, string $productId): object
@@ -40,8 +44,12 @@ class CartItemService
 
     public function addItemToCart(AddCartItemRequestDTO $dto): CartItem
     {
-        $cart = $this->cartRepository->find($dto->getCartId());
-        if (!$cart) {
+        $user = $this->userRepository->find(['id' => $dto->getUserId()]);
+        if (!$user) {
+            throw new UserNotFoundException('User not found');
+        }
+        $cart = $this->cartRepository->findOneBy(['user' => $user]);
+        if(!$cart) {
             throw new \RuntimeException('Cart not found');
         }
         $product = $this->productRepository->find($dto->getProductId());
@@ -71,9 +79,9 @@ class CartItemService
         return $cartItem;
     }
 
-    public function removeItemFromCart(string $id): void
+    public function removeItemFromCart(string $cartItemId): void
     {
-        $cartItem = $this->cartItemRepository->find($id);
+        $cartItem = $this->cartItemRepository->find($cartItemId);
         if (null == $cartItem) {
             throw new \RuntimeException('Cart item not found');
         }
