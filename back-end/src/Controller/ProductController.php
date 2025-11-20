@@ -57,9 +57,16 @@ class ProductController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route('/product/name/{name}', name: 'api_products_by_name', methods: ['GET'])]
-    public function getProductByName(string $name): JsonResponse
+    #[Route('/product/name', name: 'api_products_by_name', methods: ['GET'])]
+    public function getProductByName(Request $request): JsonResponse
     {
+        $name = $request->query->get('search');
+        if (!$name) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Query parameter "category" is required.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
         try {
             $products = $this->productService->getProductsByName($name);
         } catch (\Exception $e) {
@@ -74,9 +81,16 @@ class ProductController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route('/product/category/{category}', name: 'api_products_by_category', methods: ['GET'])]
-    public function getProductsByCategory(string $category): JsonResponse
+    #[Route('/product/category', name: 'api_products_by_category', methods: ['GET'])]
+    public function getProductsByCategory(Request $request): JsonResponse
     {
+        $category = $request->query->get('category');
+        if (!$category) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Query parameter "category" is required.'
+            ], Response::HTTP_BAD_REQUEST);
+        }
         try {
             $products = $this->productService->getProductsByCategory($category);
         } catch (\Exception $e) {
