@@ -124,7 +124,8 @@ class CartItemController extends AbstractController
         }
         return $this->json([
             'success' => true,
-            'message' => 'Item deleted from cart successfully'
-        ], Response::HTTP_NO_CONTENT);
+            'message' => 'Item deleted from cart successfully',
+            'cartItemId' => $cartItemId
+        ], Response::HTTP_OK);
     }
 }
