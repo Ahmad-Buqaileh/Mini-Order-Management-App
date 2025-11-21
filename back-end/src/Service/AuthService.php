@@ -8,6 +8,7 @@ use App\Entity\Exception\UserAlreadyExistsException;
 use App\Mapper\UserMapper;
 use App\Repository\UserRepository;
 use App\Security\JwtService;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Exception\LogicException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
@@ -43,8 +44,7 @@ class AuthService
         ];
     }
 
-
-    public function logIn(UserLoginRequestDTO $dto): array
+    public function login(UserLoginRequestDTO $dto): array
     {
         $user = $this->userRepository->findOneBy(['email' => $dto->getEmail()]);
         if (!$user) {
@@ -59,5 +59,9 @@ class AuthService
             'accessToken' => $accessToken,
             'refreshToken' => $refreshToken,
         ];
+    }
+
+    public function refreshToken(Request $request): string{
+        return $this->jwtService->refreshAccessToken($request);
     }
 }

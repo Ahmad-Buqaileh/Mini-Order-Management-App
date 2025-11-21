@@ -53,7 +53,7 @@ class AuthController extends AbstractController
             ], Response:: HTTP_BAD_REQUEST);
         }
         try {
-            $result = $this->authService->logIn($dto);
+            $result = $this->authService->login($dto);
         } catch (\Exception $e) {
             return $this->json([
                 'success' => false,
@@ -112,4 +112,32 @@ class AuthController extends AbstractController
         return $response;
     }
 
+    #[Route('/logout', name: 'api_auth_logout', methods: ['GET'])]
+    public function logout(): JsonResponse
+    {
+        $response = $this->json([
+            'success' => true,
+            'message' => "Successfully logged out",
+        ], Response::HTTP_OK);
+        $this->jwtService->removeTokenFromCookie($response);
+        return $response;
+    }
+
+    #[Route('/refresh', name: 'api_auth_refresh', methods: ['GET'])]
+    public function refreshToken(Request $request): JsonResponse
+    {
+        try {
+            $accessToken = $this->authService->refreshToken($request);
+        } catch (\Exception $e) {
+            return $this->json([
+                'success' => false,
+                'message' => $e->getMessage(),
+            ], Response::HTTP_UNAUTHORIZED);
+        }
+        return $this->json([
+            'success' => true,
+            'message' => "Successfully refreshed token",
+            'accessToken' => $accessToken,
+        ], Response::HTTP_OK);
+    }
 }
