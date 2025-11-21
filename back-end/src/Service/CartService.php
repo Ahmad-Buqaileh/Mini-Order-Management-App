@@ -39,6 +39,7 @@ class CartService
                     'id' => $item->getProduct()->getId(),
                     'name' => $item->getProduct()->getName(),
                     'price' => $item->getProduct()->getPrice(),
+                    'stock' => $item->getProduct()->getStock(),
                 ],
             ];
         }, $cart->getItems()->toArray());
