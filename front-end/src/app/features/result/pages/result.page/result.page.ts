@@ -24,8 +24,7 @@ export class ResultPage implements OnInit {
   ngOnInit(): void {
     this.category = this.route.snapshot.paramMap.get('query');
     const source = this.route.snapshot.queryParamMap.get('source');
-    console.log('Query param:', this.category, 'source:', source);
-
+ 
     if (this.category) {
       if (source === 'category') {
         this.store.dispatch(ResultActions.loadCategoryResults({ category: this.category }));
