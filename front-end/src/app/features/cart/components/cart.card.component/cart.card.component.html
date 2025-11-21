@@ -8,25 +8,36 @@
   <div class="flex flex-row justify-between items-center mb-4 text-sm md:text-base">
     <p>
       <strong>Quantity: </strong>
-      <span class="font-medium">{{ cartItem.quantity }}</span>
     </p>
   </div>
   <div class="flex flex-row justify-between">
     <div class="flex flex-row items-center gap-3">
+      @if(quantity() > 1){
       <button
         class="cursor-pointer px-3 py-1 text-lg bg-gray-100 hover:bg-gray-200 rounded"
         aria-label="decrease quantity"
+        (click)="decrementQuantity()"
       >
         -
       </button>
-      <p class="px-3 text-lg font-semibold">1</p>
+      } @else {
+      <button
+        class="cursor-pointer px-3 py-1 text-lg bg-gray-100 hover:bg-gray-200 rounded"
+        aria-label="decrease quantity"
+        (click)="removeItem()"
+      >
+        -
+      </button>
+      }
+      <span class="font-medium">{{ quantity() }}</span>
       <button
         class="cursor-pointer px-3 py-1 text-lg bg-gray-100 hover:bg-gray-200 rounded"
         aria-label="increase quantity"
+        (click)="incrementQuantity()"
       >
         +
       </button>
     </div>
-    <p><span class="font-bold">Total:</span> {{cartItem.subtotal}}</p>
+    <p><span class="font-bold">Total:</span> {{ cartItem.subtotal }}</p>
   </div>
 </div>

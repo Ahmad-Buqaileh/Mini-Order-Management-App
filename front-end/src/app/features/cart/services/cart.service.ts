@@ -9,6 +9,7 @@ export interface CartItemResponse {
   product: {
     name: string;
     price: number;
+    stock: number;
   };
 }
 
@@ -26,5 +27,13 @@ export class CartService {
 
   createUserCart(userId: string) {
     return this.http.post<{ message: string }>(`${this.api}/`, { userId });
+  }
+
+  updateCartItemQuantity(cartItemId: string, quantity: number) {
+    return this.http.put<CartItemResponse>(`${this.api}/update`, { cartItemId, quantity });
+  }
+
+  removeCartItem(cartItemId: string) {
+    return this.http.delete<{ cartItemId: string }>(`${this.api}/delete/${cartItemId}`);
   }
 }
