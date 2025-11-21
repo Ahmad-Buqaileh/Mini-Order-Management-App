@@ -70,7 +70,7 @@ class OrderService
     public function createOrderFromUserCart(string $userToken): Order
     {
         $userId = $this->jwtService->getUserIdFromToken($userToken);
-        $user = $this->userRepository->find($userToken);
+        $user = $this->userRepository->find($userId);
         if (!$user) {
             throw new UserNotFoundException('User not found');
         }

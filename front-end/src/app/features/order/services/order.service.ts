@@ -41,8 +41,8 @@ export class OrderService {
       map((response) => response.OrderItems)
     )
   }
-  getOrderHistory(userId: string) {
-    return this.http.get<OrderApiResponse>(`${this.api}/${userId}`).pipe(
+  getOrderHistory(userToken: string) {
+    return this.http.get<OrderApiResponse>(`${this.api}/${userToken}`).pipe(
       map((response) =>
         response.orders.map((order) => ({
           ...order,
@@ -51,7 +51,7 @@ export class OrderService {
       )
     );
   }
-  createOrder(userId: string) {
-    return this.http.post<OrderResponse>(`${this.api}/${userId}`, {});
+  createOrder(userToken: string) {
+    return this.http.post<OrderResponse>(`${this.api}/${userToken}`, {});
   }
 }
