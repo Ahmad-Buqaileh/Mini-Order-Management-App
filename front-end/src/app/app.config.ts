@@ -14,6 +14,8 @@ import { orderReducer } from './features/order/store/order.reducers';
 import { OrderEffects } from './features/order/store/order.effects';
 import { SearchEffects } from './features/search/store/search.effects';
 import { searchReducer } from './features/search/store/search.reducers';
+import { AuthEffects } from './features/auth/store/auth.effects';
+import { authReducer } from './features/auth/store/auth.reducers';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -21,7 +23,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes), provideClientHydration(withEventReplay()),
-    provideStore({products: productReducer, cart: cartReducer,orders: orderReducer, search: searchReducer}),
-    provideEffects([ProductsEffects, CartEffects, OrderEffects, SearchEffects])
+    provideStore({products: productReducer, cart: cartReducer,orders: orderReducer, search: searchReducer, auth: authReducer}),
+    provideEffects([ProductsEffects, CartEffects, OrderEffects, SearchEffects, AuthEffects])
 ]
 };
