@@ -9,6 +9,7 @@ use App\Repository\CartRepository;
 use App\Repository\OrderItemRepository;
 use App\Repository\OrderRepository;
 use App\Repository\UserRepository;
+use App\Security\JwtService;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class OrderService
@@ -18,16 +19,18 @@ class OrderService
     private CartRepository $cartRepository;
     private CartItemRepository $cartItemRepository;
     private OrderItemRepository $orderItemRepository;
+    private JwtService  $jwtService;
 
     public function __construct(OrderRepository     $orderRepository, UserRepository $userRepository,
                                 CartRepository      $cartRepository, CartItemRepository $cartItemRepository,
-                                OrderItemRepository $orderItemRepository)
+                                OrderItemRepository $orderItemRepository, JwtService $jwtService)
     {
         $this->orderRepository = $orderRepository;
         $this->userRepository = $userRepository;
         $this->cartRepository = $cartRepository;
         $this->cartItemRepository = $cartItemRepository;
         $this->orderItemRepository = $orderItemRepository;
+        $this->jwtService = $jwtService;
     }
 
     public function getOrderItems(string $orderId): array
@@ -47,8 +50,9 @@ class OrderService
         }, $order->getItems()->toArray());
     }
 
-    public function getUserOrders(string $userId): array
+    public function getUserOrders(string $userToken): array
     {
+        $userId = $this->jwtService->getUserIdFromToken($userToken);
         $user = $this->userRepository->find($userId);
         if (!$user) {
             throw new UserNotFoundException('User not found');
@@ -63,9 +67,10 @@ class OrderService
         }, $orders);
     }
 
-    public function createOrderFromUserCart(string $userId): Order
+    public function createOrderFromUserCart(string $userToken): Order
     {
-        $user = $this->userRepository->find($userId);
+        $userId = $this->jwtService->getUserIdFromToken($userToken);
+        $user = $this->userRepository->find($userToken);
         if (!$user) {
             throw new UserNotFoundException('User not found');
         }

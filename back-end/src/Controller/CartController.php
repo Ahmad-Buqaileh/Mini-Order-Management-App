@@ -18,14 +18,14 @@ class CartController extends AbstractController
         $this->cartService = $cartService;
     }
 
-    #[Route("/cart/{id}", name: "api_cart_items", methods: ['GET'])]
-    public function getCartItems(string $id): JsonResponse
+    #[Route("/cart/{userToken}", name: "api_cart_items", methods: ['GET'])]
+    public function getCartItems(string $userToken): JsonResponse
     {
         try {
-            $items = $this->cartService->getCartItems($id);
+            $items = $this->cartService->getCartItems($userToken);
         } catch (\Exception $e) {
             return new JsonResponse([
-                'success' => false,
+                'success' => false, 
                 'message' => $e->getMessage()
             ], Response::HTTP_BAD_REQUEST);
         }
@@ -35,11 +35,11 @@ class CartController extends AbstractController
         ], Response::HTTP_OK);
     }
 
-    #[Route("/{id}", name: "api_cart_items_create", methods: ['POST'])]
-    public function createCart(string $id): JsonResponse
+    #[Route("/{userToken}", name: "api_cart_items_create", methods: ['POST'])]
+    public function createCart(string $userToken): JsonResponse
     {
         try {
-            $cart = $this->cartService->createCartForUser($id);
+            $cart = $this->cartService->createCartForUser($userToken);
         } catch (\Exception $e) {
             return new JsonResponse([
                 'success' => false,

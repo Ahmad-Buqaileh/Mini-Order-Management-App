@@ -18,6 +18,4 @@ class UserController extends AbstractController
         $this->userService = $userService;
         $this->validator = $validator;
     }
-
-
 }

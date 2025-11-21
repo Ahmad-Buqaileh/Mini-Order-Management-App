@@ -14,8 +14,8 @@ export class OrderEffects {
     this.loadOrders$ = createEffect(() =>
       this.actions$.pipe(
         ofType(OrderActions.loadOrders),
-        mergeMap(({ userId }) =>
-          this.orderService.getOrderHistory(userId).pipe(
+        mergeMap(({ userToken }) =>
+          this.orderService.getOrderHistory(userToken).pipe(
             map((orders: any) => OrderActions.loadOrdersSuccess({ orders })),
             catchError((err) => of(OrderActions.loadOrderFailure({ error: err.message })))
           )
@@ -25,8 +25,8 @@ export class OrderEffects {
     this.createOrder$ = createEffect(() =>
       this.actions$.pipe(
         ofType(OrderActions.createOrder),
-        mergeMap(({ userId }) =>
-          this.orderService.createOrder(userId).pipe(
+        mergeMap(({ userToken }) =>
+          this.orderService.createOrder(userToken).pipe(
             map((order) => OrderActions.createOrderSuccess({ order })),
             catchError((err) => of(OrderActions.createOrderFailure({ error: err.message })))
           )

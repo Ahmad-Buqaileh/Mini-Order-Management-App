@@ -38,6 +38,6 @@
         +
       </button>
     </div>
-    <p><span class="font-bold">Total:</span> {{ cartItem.subtotal }}</p>
+    <p><span class="font-bold">Total:</span> {{ cartItem.subtotal | number:'1.2-2' }}</p>
   </div>
 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Security\JwtService;
 use App\Service\OrderService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -39,11 +40,11 @@ class OrderController extends AbstractController
             ], Response::HTTP_OK);
     }
 
-    #[Route('/{userId}', name: 'api_orders_get', methods: ['GET'])]
-    public function getUserOrders(string $userId): JsonResponse
+    #[Route('/{userToken}', name: 'api_orders_get', methods: ['GET'])]
+    public function getUserOrders(string $userToken): JsonResponse
     {
         try {
-            $orders = $this->orderService->getUserOrders($userId);
+            $orders = $this->orderService->getUserOrders($userToken);
         } catch (\Exception $exception) {
             return new JsonResponse([
                 'success' => false,
@@ -57,11 +58,11 @@ class OrderController extends AbstractController
             ], Response::HTTP_OK);
     }
 
-    #[Route('/{userId}', name: 'api_orders_add', methods: ['POST'])]
-    public function createOrder(string $userId): JsonResponse
+    #[Route('/{userToken}', name: 'api_orders_add', methods: ['POST'])]
+    public function createOrder(string $userToken): JsonResponse
     {
         try {
-            $order = $this->orderService->createOrderFromUserCart($userId);
+            $order = $this->orderService->createOrderFromUserCart($userToken);
         } catch (\Exception $exception) {
             return new JsonResponse([
                 'error' => $exception->getMessage()

@@ -38,7 +38,7 @@ class CartItemController extends AbstractController
         }
         $dto = new AddCartItemRequestDTO(
             $data['productId'],
-            $data['userId'],
+            $data['userToken'],
             $data['quantity']
         );
         $errors = $this->validator->validate($dto);

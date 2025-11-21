@@ -19,8 +19,8 @@ import { selectUserToken } from '../../../auth/store/auth.selectors';
 })
 export class OrderHistoryPage implements OnInit {
   orders$!: Observable<OrderState>;
-  userToken$: Observable<string | null>;
-  private userId = '019a9609-46d4-7086-9ae9-70c535157d96';
+  userToken$: Observable<string>;
+  userToken!: string;
   private store = inject(Store);
   private router = inject(Router);
   private destroyRef = inject(DestroyRef);
@@ -30,6 +30,8 @@ export class OrderHistoryPage implements OnInit {
     this.userToken$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((token) => {
       if (!token) {
         this.router.navigate(['/auth']);
+      }else {
+        this.userToken = token;
       }
     });
   }
@@ -37,7 +39,7 @@ export class OrderHistoryPage implements OnInit {
   ngOnInit(): void {
     this.store.dispatch(
       OrderActions.loadOrders({
-        userId: this.userId,
+        userToken: this.userToken,
       })
     );
     this.orders$ = this.store.select(selectOrderState);

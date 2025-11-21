@@ -1,5 +1,5 @@
 export interface AddProductModel {
     productId: string;
-    userId: string;
+    userToken: string;
     quantity: number;
     }

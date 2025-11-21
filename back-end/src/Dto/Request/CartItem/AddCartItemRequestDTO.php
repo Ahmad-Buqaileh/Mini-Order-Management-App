@@ -8,16 +8,16 @@ class AddCartItemRequestDTO
 {
     #[Assert\NotBlank(message: "product id can't be empty")]
     private string $productId;
-    #[Assert\NotBlank(message: "user id can't be empty")]
-    private string $userId;
+    #[Assert\NotBlank(message: "user token can't be empty")]
+    private string $userToken;
     #[Assert\NotBlank(message: "quantity can't be empty")]
     #[Assert\Range(notInRangeMessage: ("quantity can't be lower than 1 and higher that 100"), min: 1, max: 100), ]
     private int $quantity;
 
-    public function __construct(string $productId, string $userId, int $quantity = 1)
+    public function __construct(string $productId, string $userToken, int $quantity = 1)
     {
         $this->productId = $productId;
-        $this->userId = $userId;
+        $this->userToken = $userToken;
         $this->quantity = $quantity;
     }
 
@@ -26,9 +26,9 @@ class AddCartItemRequestDTO
         return $this->productId;
     }
 
-    public function getUserId(): string
+    public function getUserToken(): string
     {
-        return $this->userId;
+        return $this->userToken;
     }
 
     public function getQuantity(): int

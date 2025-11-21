@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { OrderResponse } from '../services/order.service';
 
-export const loadOrders = createAction('[Order] Load Orders', props<{ userId: string }>());
+export const loadOrders = createAction('[Order] Load Orders', props<{ userToken: string }>());
 export const loadOrdersSuccess = createAction(
   '[Order] Load Orders Success',
   props<{ orders: OrderResponse[] }>()
@@ -11,7 +11,7 @@ export const loadOrderFailure = createAction(
   props<{ error: any }>()
 );
 
-export const createOrder = createAction('[Order] Create Order', props<{ userId: string }>());
+export const createOrder = createAction('[Order] Create Order', props<{ userToken: string }>());
 export const createOrderSuccess = createAction(
   '[Order] Create Order Success',
   props<{ order: OrderResponse }>()

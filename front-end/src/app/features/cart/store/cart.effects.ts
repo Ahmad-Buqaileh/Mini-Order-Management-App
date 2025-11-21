@@ -15,8 +15,8 @@ export class CartEffects {
     this.loadCartItems$ = createEffect(() =>
       this.actions$.pipe(
         ofType(CartActions.loadCartItems),
-        mergeMap(({ userId }) =>
-          this.cartService.getCartItems(userId).pipe(
+        mergeMap(({ userToken }) =>
+          this.cartService.getCartItems(userToken).pipe(
             map((res: any) => CartActions.loadCartItemsSuccess({ cartItems: res.cartItems })),
             catchError((err) => of(CartActions.loadCartItemsFailure({ error: err.message })))
           )
@@ -27,8 +27,8 @@ export class CartEffects {
     this.createUserCart$ = createEffect(() =>
       this.actions$.pipe(
         ofType(CartActions.createUserCart),
-        mergeMap(({ userId }) =>
-          this.cartService.createUserCart(userId).pipe(
+        mergeMap(({ userToken }) =>
+          this.cartService.createUserCart(userToken).pipe(
             map((res: any) => CartActions.createUserCartSuccess({ message: res.message })),
             catchError((err) => of(CartActions.createUserCartFailure({ error: err.message })))
           )

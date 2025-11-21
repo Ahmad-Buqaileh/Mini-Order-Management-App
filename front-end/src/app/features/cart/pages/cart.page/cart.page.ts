@@ -23,8 +23,7 @@ export class CartPage implements OnInit {
   cartItems$!: Observable<CartItemResponse[]>;
   totalPrice$!: Observable<number>;
   userToken$: Observable<string | null>;
-
-  private userId = '019a9609-46d4-7086-9ae9-70c535157d96';
+  userToken!: string;
 
   constructor(private store: Store) {
     const destroyRef = inject(DestroyRef);
@@ -33,6 +32,8 @@ export class CartPage implements OnInit {
     this.userToken$.pipe(takeUntilDestroyed(destroyRef)).subscribe((token) => {
       if (!token) {
         router.navigate(['/auth']);
+      } else {
+        this.userToken = token;
       }
     });
     this.totalPrice$ = this.store
@@ -43,14 +44,14 @@ export class CartPage implements OnInit {
   }
 
   ngOnInit(): void {
-    this.store.dispatch(CartActions.loadCartItems({ userId: this.userId }));
+    this.store.dispatch(CartActions.loadCartItems({ userToken: this.userToken }));
     this.cartItems$ = this.store.select(selectCartItems);
   }
 
   handleSubmitOrder() {
     this.store.dispatch(
       OrderActions.createOrder({
-        userId: this.userId,
+        userToken: this.userToken,
       })
     );
   }

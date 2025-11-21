@@ -9,6 +9,7 @@ use App\Repository\CartItemRepository;
 use App\Repository\CartRepository;
 use App\Repository\ProductRepository;
 use App\Repository\UserRepository;
+use App\Security\JwtService;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 
 class CartItemService
@@ -17,14 +18,17 @@ class CartItemService
     private CartRepository $cartRepository;
     private UserRepository $userRepository;
     private CartItemRepository $cartItemRepository;
+    private JwtService $jwtService;
 
     public function __construct(ProductRepository  $productRepository, CartRepository $cartRepository,
-                                CartItemRepository $cartItemRepository, UserRepository $userRepository)
+                                CartItemRepository $cartItemRepository, UserRepository $userRepository,
+                                JwtService         $jwtService)
     {
         $this->productRepository = $productRepository;
         $this->cartRepository = $cartRepository;
         $this->cartItemRepository = $cartItemRepository;
         $this->userRepository = $userRepository;
+        $this->jwtService = $jwtService;
     }
 
     public function getCartItem(string $cartId, string $productId): object
@@ -45,7 +49,8 @@ class CartItemService
 
     public function addItemToCart(AddCartItemRequestDTO $dto): CartItem
     {
-        $user = $this->userRepository->find(['id' => $dto->getUserId()]);
+        $userId = $this->jwtService->getUserIdFromToken($dto->getUserToken());
+        $user = $this->userRepository->find(['id' => $userId]);
         if (!$user) {
             throw new UserNotFoundException('User not found');
         }

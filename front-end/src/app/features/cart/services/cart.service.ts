@@ -22,12 +22,12 @@ export class CartService {
 
   constructor(private http: HttpClient) {}
 
-  getCartItems(userId: string) {
-    return this.http.get<CartItemResponse[]>(`${this.cartApi}/cart/${userId}`);
+  getCartItems(userToken: string) {
+    return this.http.get<CartItemResponse[]>(`${this.cartApi}/cart/${userToken}`);
   }
 
-  createUserCart(userId: string) {
-    return this.http.post<{ message: string }>(`${this.cartApi}/`, { userId });
+  createUserCart(userToken: string) {
+    return this.http.post<{ message: string }>(`${this.cartApi}/${userToken}`, {});
   }
 
   updateCartItemQuantity(cartItemId: string, quantity: number) {

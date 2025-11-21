@@ -1,7 +1,7 @@
 import { createAction, props } from '@ngrx/store';
 import { CartItemResponse } from '../services/cart.service';
 
-export const loadCartItems = createAction(' [Cart] Load Cart Items', props<{ userId: string }>());
+export const loadCartItems = createAction(' [Cart] Load Cart Items', props<{ userToken: string }>());
 export const loadCartItemsSuccess = createAction(
   '[Cart] Load Cart Items Success',
   props<{ cartItems: CartItemResponse[] }>()
@@ -11,7 +11,7 @@ export const loadCartItemsFailure = createAction(
   props<{ error: any }>()
 );
 
-export const createUserCart = createAction('[Cart] Create User Cart', props<{ userId: string }>());
+export const createUserCart = createAction('[Cart] Create User Cart', props<{ userToken: string }>());
 export const createUserCartSuccess = createAction(
   '[Cart] Create User Cart Success',
   props<{ message: string }>()
