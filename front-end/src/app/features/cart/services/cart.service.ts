@@ -17,23 +17,24 @@ export interface CartItemResponse {
   providedIn: 'root',
 })
 export class CartService {
-  private api = environment.cartUrl;
+  private cartApi = environment.cartUrl;
+  private cartItemsApi = environment.cartItemUrl;
 
   constructor(private http: HttpClient) {}
 
   getCartItems(userId: string) {
-    return this.http.get<CartItemResponse[]>(`${this.api}/cart/${userId}`);
+    return this.http.get<CartItemResponse[]>(`${this.cartApi}/cart/${userId}`);
   }
 
   createUserCart(userId: string) {
-    return this.http.post<{ message: string }>(`${this.api}/`, { userId });
+    return this.http.post<{ message: string }>(`${this.cartApi}/`, { userId });
   }
 
   updateCartItemQuantity(cartItemId: string, quantity: number) {
-    return this.http.put<CartItemResponse>(`${this.api}/update`, { cartItemId, quantity });
+    return this.http.put<CartItemResponse>(`${this.cartItemsApi}/update`, { cartItemId, quantity });
   }
 
   removeCartItem(cartItemId: string) {
-    return this.http.delete<{ cartItemId: string }>(`${this.api}/delete/${cartItemId}`);
+    return this.http.delete<{ cartItemId: string }>(`${this.cartItemsApi}?itemId=${cartItemId}`);
   }
 }
