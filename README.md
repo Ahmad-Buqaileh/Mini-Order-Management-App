@@ -85,7 +85,7 @@ http://localhost:3000
 
 ## To-Do
 
-- implement full API logic for authentication and cart item updates
+- implement full API logic for authentication and cart item updates (done)
 - Add Docker configuration for backend and frontend containers
 - Implement toast notification
 - Add pagination for product listing
